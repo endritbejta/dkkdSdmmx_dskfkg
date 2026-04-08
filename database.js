@@ -15,6 +15,13 @@ function initDb() {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
+
+    // Safely add display_name for existing/new databases
+    try {
+        db.exec(`ALTER TABLE users ADD COLUMN display_name TEXT`);
+    } catch (err) {
+        // Will throw an error if the column already exists, which is fine
+    }
 }
 
 initDb();
