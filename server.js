@@ -57,8 +57,17 @@ app.post('/api/register', async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const stmt = db.prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)');
-        const info = stmt.run(username, hashedPassword);
+        
+        // Grant admin and paid status automatically if it is the owner
+        let isAdmin = 0;
+        let isPaid = 0;
+        if (username.toLowerCase() === 'endrit.bejta@hotmail.com') {
+            isAdmin = 1;
+            isPaid = 1;
+        }
+
+        const stmt = db.prepare('INSERT INTO users (username, password_hash, is_admin, is_paid) VALUES (?, ?, ?, ?)');
+        const info = stmt.run(username, hashedPassword, isAdmin, isPaid);
         
         // Auto-login after register
         req.session.userId = info.lastInsertRowid;
@@ -147,10 +156,15 @@ app.post('/api/change-password', requireAuth, async (req, res) => {
 // 5. Get current user info
 app.get('/api/me', requireAuth, (req, res) => {
     try {
-        const stmt = db.prepare('SELECT username, display_name FROM users WHERE id = ?');
+        const stmt = db.prepare('SELECT username, display_name, is_paid, is_admin FROM users WHERE id = ?');
         const user = stmt.get(req.session.userId);
         if (user) {
-            res.json({ username: user.username, display_name: user.display_name });
+            res.json({ 
+                username: user.username, 
+                display_name: user.display_name,
+                is_paid: !!user.is_paid,
+                is_admin: !!user.is_admin
+            });
         } else {
             res.status(404).json({ error: 'User not found' });
         }
@@ -172,11 +186,43 @@ app.post('/api/update-profile', requireAuth, (req, res) => {
     }
 });
 
+// ------ ADMIN API ROUTES ------
+
+app.get('/api/admin/users', requireAuth, (req, res) => {
+    const adminCheck = db.prepare('SELECT is_admin FROM users WHERE id = ?').get(req.session.userId);
+    if (!adminCheck || !adminCheck.is_admin) return res.status(403).json({ error: 'Forbidden' });
+    
+    try {
+        const users = db.prepare('SELECT id, username, display_name, created_at, is_paid, is_admin FROM users ORDER BY created_at DESC').all();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/api/admin/verify', requireAuth, (req, res) => {
+    const adminCheck = db.prepare('SELECT is_admin FROM users WHERE id = ?').get(req.session.userId);
+    if (!adminCheck || !adminCheck.is_admin) return res.status(403).json({ error: 'Forbidden' });
+    
+    const { userId, isPaid } = req.body;
+    try {
+        db.prepare('UPDATE users SET is_paid = ? WHERE id = ?').run(isPaid ? 1 : 0, userId);
+        res.json({ message: 'User status successfully updated' });
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // ------ PROTECTED PDF ROUTE ------
 
 // Serve the PDF only if logged in
 app.get('/book.pdf', requireAuth, (req, res) => {
-    const filePath = path.join(__dirname, 'book.pdf');
+    const user = db.prepare('SELECT is_paid FROM users WHERE id = ?').get(req.session.userId);
+    const isPaid = user && user.is_paid;
+    
+    // Serve preview to unpaid users, full book for paid
+    const fileName = isPaid ? 'book.pdf' : 'preview.pdf';
+    const filePath = path.join(__dirname, fileName);
     if (fs.existsSync(filePath)) {
         res.sendFile(filePath);
     } else {

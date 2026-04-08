@@ -120,10 +120,30 @@ async function checkAuthOnProtectedPage() {
             return;
         }
         const data = await res.json();
+        
+        // Show Admin Link if Admin
+        if (data.is_admin) {
+            const adminLink = document.getElementById('admin-link');
+            if (adminLink) adminLink.classList.remove('hidden');
+        }
+
         const welcomeMessage = document.getElementById('welcome-message');
         if (welcomeMessage) {
             const displayName = data.display_name || data.username;
             welcomeMessage.innerHTML = `Welcome, <span style="color: var(--accent-color);">${displayName}</span>!`;
+        }
+        
+        const statusMessage = document.getElementById('status-message');
+        const actionArea = document.getElementById('action-area');
+        
+        if (statusMessage && actionArea) {
+            if (data.is_paid) {
+                statusMessage.innerHTML = 'You have successfully unlocked access to the comprehensive Forex guide.';
+                actionArea.innerHTML = '<a href="reader.html" class="btn btn-large">📖 Read The Complete Book</a>';
+            } else {
+                statusMessage.innerHTML = 'You are currently viewing the <strong style="color:#ef4444;">Free Preview</strong>. To unlock the complete book, please contact the admin to verify your payment.';
+                actionArea.innerHTML = '<a href="reader.html" class="btn btn-large" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📖 Read 10-Page Preview</a>';
+            }
         }
     } catch (e) {
         window.location.href = 'index.html';
@@ -203,5 +223,60 @@ function initProfilePage() {
                 showAlert('settings-alert', 'Network error.', true);
             }
         });
+    }
+}
+
+// ----------------------------------------------------
+// ADMIN LOGIC (admin.html)
+// ----------------------------------------------------
+async function initAdminPage() {
+    try {
+        const res = await fetch('/api/admin/users');
+        if (!res.ok) {
+            window.location.href = 'app.html';
+            return;
+        }
+        const users = await res.json();
+        const tbody = document.getElementById('users-table-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        users.forEach(u => {
+            const tr = document.createElement('tr');
+            
+            const badgeClass = u.is_paid ? 'badge paid' : 'badge unpaid';
+            const badgeText = u.is_paid ? 'Paid' : 'Free Preview';
+            const actionBtn = u.is_paid 
+                ? `<button class="btn-small btn-secondary" onclick="togglePayment(${u.id}, false)">Revoke Access</button>`
+                : `<button class="btn-small btn-success" onclick="togglePayment(${u.id}, true)">Verify Payment</button>`;
+                
+            tr.innerHTML = `
+                <td><strong>${u.username}</strong></td>
+                <td>${new Date(u.created_at).toLocaleDateString()}</td>
+                <td><span class="${badgeClass}">${badgeText}</span></td>
+                <td>${u.is_admin ? '<span class="badge" style="background:#3b82f6;color:white;">Admin</span>' : actionBtn}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch(err) {
+        window.location.href = 'app.html';
+    }
+}
+
+async function togglePayment(userId, isPaid) {
+    try {
+        const res = await fetch('/api/admin/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, isPaid })
+        });
+        if (res.ok) {
+            initAdminPage(); // Refresh list
+        } else {
+            showAlert('admin-alert', 'Failed to update user', true);
+        }
+    } catch(err) {
+        showAlert('admin-alert', 'Network error', true);
     }
 }

@@ -12,16 +12,22 @@ function initDb() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            is_paid BOOLEAN DEFAULT 0,
+            is_admin BOOLEAN DEFAULT 0
         )
     `);
 
-    // Safely add display_name for existing/new databases
-    try {
-        db.exec(`ALTER TABLE users ADD COLUMN display_name TEXT`);
-    } catch (err) {
-        // Will throw an error if the column already exists, which is fine
-    }
+    // Safely add columns for existing/new databases (ignoring errors if columns exist)
+    const migrations = [
+        `ALTER TABLE users ADD COLUMN display_name TEXT`,
+        `ALTER TABLE users ADD COLUMN is_paid BOOLEAN DEFAULT 0`,
+        `ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT 0`
+    ];
+    
+    migrations.forEach(mig => {
+        try { db.exec(mig); } catch(err) {} 
+    });
 }
 
 initDb();

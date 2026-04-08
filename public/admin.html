@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Forex Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .table-container { overflow-x: auto; margin-top: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 1rem; border-bottom: 1px solid var(--surface-border); }
+        th { font-weight: 600; color: var(--text-secondary); }
+        tr:hover { background: rgba(255,255,255,0.02); }
+        .badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+        .badge.paid { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .badge.unpaid { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; border-radius: 6px; }
+        .btn-success { background: #10b981; }
+        .btn-success:hover { background: #059669; }
+    </style>
+</head>
+<body>
+
+    <div class="container dashboard-container">
+        
+        <header class="dashboard-header flex-between">
+            <h2>Admin <span style="color: var(--accent-color);">Panel</span></h2>
+            <div>
+                <a href="app.html" class="btn btn-secondary" style="padding: 0.75rem 1.25rem;">Back to Dashboard</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="glass-panel" style="width: 100%;">
+                <h3 class="mb-2">User Management</h3>
+                <p>View all registered users and verify their payment status so they can access the full PDF.</p>
+
+                <div id="admin-alert" class="alert"></div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', initAdminPage);
+    </script>
+</body>
+</html>
