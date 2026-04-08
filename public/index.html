@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex Academy | Sign In</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Form Card -->
+        <div class="glass-panel" id="auth-card">
+            
+            <!-- Alert Box -->
+            <div id="auth-alert" class="alert"></div>
+
+            <!-- Login View -->
+            <div id="login-view">
+                <div class="text-center mb-2">
+                    <h1>Welcome Back</h1>
+                    <p>Enter your details to access the exclusive Forex Academy</p>
+                </div>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" required placeholder="example">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn mt-1">Sign In</button>
+                </form>
+                
+                <p class="text-center mt-2">
+                    Don't have an account? <a class="link" id="show-register">Sign Up</a>
+                </p>
+            </div>
+
+            <!-- Register View (Hidden by default) -->
+            <div id="register-view" class="hidden">
+                <div class="text-center mb-2">
+                    <h1>Create Account</h1>
+                    <p>Join the academy to start learning today</p>
+                </div>
+
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-username">Choose a Username</label>
+                        <input type="text" id="reg-username" required placeholder="example">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Create Password</label>
+                        <input type="password" id="reg-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn mt-1">Register & Sign In</button>
+                </form>
+
+                <p class="text-center mt-2">
+                    Already have an account? <a class="link" id="show-login">Sign In</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Frontend Logic -->
+    <script src="main.js"></script>
+    <script>
+        // Specific init for Auth page
+        initAuthPage();
+        checkRedirectIfLoggedIn();
+    </script>
+</body>
+</html>
