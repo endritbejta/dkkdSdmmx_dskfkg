@@ -57,13 +57,13 @@ function initAuthPage() {
                 const data = await res.json();
                 
                 if (!res.ok) {
-                    showAlert('auth-alert', data.error || 'Login failed', true);
+                    showAlert('auth-alert', data.error || 'Hyrja dështoi', true);
                 } else {
                     // Success -> Go to App
                     window.location.href = 'app.html';
                 }
             } catch (err) {
-                showAlert('auth-alert', 'Network error. Please try again.', true);
+                showAlert('auth-alert', 'Gabim rrjeti. Ju lutemi provoni përsëri.', true);
             }
         });
     }
@@ -84,13 +84,13 @@ function initAuthPage() {
                 const data = await res.json();
                 
                 if (!res.ok) {
-                    showAlert('auth-alert', data.error || 'Registration failed', true);
+                    showAlert('auth-alert', data.error || 'Regjistrimi dështoi', true);
                 } else {
                     // Success -> Go to App (Auto-logged in)
                     window.location.href = 'app.html';
                 }
             } catch (err) {
-                showAlert('auth-alert', 'Network error. Please try again.', true);
+                showAlert('auth-alert', 'Gabim rrjeti. Ju lutemi provoni përsëri.', true);
             }
         });
     }
@@ -130,7 +130,7 @@ async function checkAuthOnProtectedPage() {
         const welcomeMessage = document.getElementById('welcome-message');
         if (welcomeMessage) {
             const displayName = data.display_name || data.username;
-            welcomeMessage.innerHTML = `Welcome, <span style="color: var(--accent-color);">${displayName}</span>!`;
+            welcomeMessage.innerHTML = `Mirësevini, <span style="color: var(--accent-color);">${displayName}</span>!`;
         }
         
         const statusMessage = document.getElementById('status-message');
@@ -138,11 +138,11 @@ async function checkAuthOnProtectedPage() {
         
         if (statusMessage && actionArea) {
             if (data.is_paid) {
-                statusMessage.innerHTML = 'You have successfully unlocked access to the comprehensive Forex guide.';
-                actionArea.innerHTML = '<a href="reader.html" class="btn btn-large">📖 Read The Complete Book</a>';
+                statusMessage.innerHTML = 'Keni zhbllokuar me sukses qasjen në udhëzuesin e plotë Forex.';
+                actionArea.innerHTML = '<a href="reader.html" class="btn btn-large">📖 Lexo Librin e Plotë</a>';
             } else {
-                statusMessage.innerHTML = 'You are currently viewing the <strong style="color:#ef4444;">Free Preview</strong>. To unlock the complete book, please contact the admin to verify your payment.';
-                actionArea.innerHTML = '<a href="reader.html" class="btn btn-large" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📖 Read 10-Page Preview</a>';
+                statusMessage.innerHTML = 'Aktualisht po shikoni <strong style="color:#ef4444;">Parashikimin Falas</strong>. Për të zhbllokuar librin e plotë, ju lutemi kontaktoni administratorin për të verifikuar pagesën tuaj.';
+                actionArea.innerHTML = '<a href="reader.html" class="btn btn-large" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📖 Lexo Parashikimin prej 10 faqesh</a>';
             }
         }
     } catch (e) {
@@ -187,12 +187,12 @@ function initProfilePage() {
                 });
                 const data = await res.json();
                 if (!res.ok) {
-                    showAlert('profile-alert', data.error || 'Failed to update profile', true);
+                    showAlert('profile-alert', data.error || 'Përditësimi i profilit dështoi', true);
                 } else {
-                    showAlert('profile-alert', 'Profile updated successfully!', false);
+                    showAlert('profile-alert', 'Profili u përditësua me sukses!', false);
                 }
             } catch (err) {
-                showAlert('profile-alert', 'Network error.', true);
+                showAlert('profile-alert', 'Gabim rrjeti.', true);
             }
         });
     }
@@ -214,13 +214,13 @@ function initProfilePage() {
                 const data = await res.json();
                 
                 if (!res.ok) {
-                    showAlert('settings-alert', data.error || 'Failed to change password', true);
+                    showAlert('settings-alert', data.error || 'Ndryshimi i fjalëkalimit dështoi', true);
                 } else {
-                    showAlert('settings-alert', 'Password updated successfully!', false);
+                    showAlert('settings-alert', 'Fjalëkalimi u përditësua me sukses!', false);
                     changePwdForm.reset();
                 }
             } catch (err) {
-                showAlert('settings-alert', 'Network error.', true);
+                showAlert('settings-alert', 'Gabim rrjeti.', true);
             }
         });
     }
@@ -246,10 +246,10 @@ async function initAdminPage() {
             const tr = document.createElement('tr');
             
             const badgeClass = u.is_paid ? 'badge paid' : 'badge unpaid';
-            const badgeText = u.is_paid ? 'Paid' : 'Free Preview';
+            const badgeText = u.is_paid ? 'Paguar' : 'Parashikim Falas';
             const actionBtn = u.is_paid 
-                ? `<button class="btn-small btn-secondary" onclick="togglePayment(${u.id}, false)">Revoke Access</button>`
-                : `<button class="btn-small btn-success" onclick="togglePayment(${u.id}, true)">Verify Payment</button>`;
+                ? `<button class="btn-small btn-secondary" onclick="togglePayment(${u.id}, false)">Revoko Qasjen</button>`
+                : `<button class="btn-small btn-success" onclick="togglePayment(${u.id}, true)">Verifiko Pagesën</button>`;
                 
             tr.innerHTML = `
                 <td><strong>${u.username}</strong></td>
@@ -274,9 +274,9 @@ async function togglePayment(userId, isPaid) {
         if (res.ok) {
             initAdminPage(); // Refresh list
         } else {
-            showAlert('admin-alert', 'Failed to update user', true);
+            showAlert('admin-alert', 'Përditësimi i përdoruesit dështoi', true);
         }
     } catch(err) {
-        showAlert('admin-alert', 'Network error', true);
+        showAlert('admin-alert', 'Gabim rrjeti', true);
     }
 }

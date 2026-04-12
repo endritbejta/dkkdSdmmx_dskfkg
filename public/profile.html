@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forex Academy | Profile</title>
+    <title>Tregto shqip | Profili</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,55 +13,55 @@
     <div class="container dashboard-container">
         
         <header class="dashboard-header flex-between">
-            <a href="app.html" class="link">&larr; Back to Dashboard</a>
-            <h2>Profile <span style="color: var(--accent-color);">Settings</span></h2>
+            <a href="app.html" class="link">&larr; Kthehu te Paneli</a>
+            <h2>Cilësimet e <span style="color: var(--accent-color);">Profilit</span></h2>
         </header>
 
         <main style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
             
             <!-- Update Profile section -->
             <div class="glass-panel" style="flex: 1; min-width: 300px; max-width: 400px;">
-                <h3 class="mb-2 text-center">Update Profile</h3>
+                <h3 class="mb-2 text-center">Përditëso Profilin</h3>
                 
                 <div id="profile-alert" class="alert"></div>
 
                 <form id="update-profile-form">
                     <div class="form-group">
-                        <label for="display-name">Display Name</label>
+                        <label for="display-name">Emri i Shfaqur</label>
                         <input type="text" id="display-name" placeholder="John Doe">
                     </div>
                     
                     <div class="form-group">
-                        <label>Email Notifications (Demo)</label>
+                        <label>Njoftimet me Email (Demo)</label>
                         <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" id="email-notifs" style="width: auto;" checked> Give me updates about new books
+                            <input type="checkbox" id="email-notifs" style="width: auto;" checked> Më dërgoni përditësime rreth librave të rinj
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn mt-1">Save Profile</button>
+                    <button type="submit" class="btn mt-1">Ruaj Profilin</button>
                 </form>
             </div>
 
             <!-- Change Password section -->
             <div class="glass-panel" style="flex: 1; min-width: 300px; max-width: 400px;">
-                <h3 class="mb-2 text-center">Change Password</h3>
+                <h3 class="mb-2 text-center">Ndrysho Fjalëkalimin</h3>
                 
                 <div id="settings-alert" class="alert"></div>
 
                 <form id="change-password-form">
                     <div class="form-group">
-                        <label for="current-password">Current Password</label>
+                        <label for="current-password">Fjalëkalimi Aktual</label>
                         <input type="password" id="current-password" required>
                     </div>
                     <div class="form-group">
-                        <label for="new-password">New Password</label>
+                        <label for="new-password">Fjalëkalimi i Ri</label>
                         <input type="password" id="new-password" required>
                     </div>
-                    <button type="submit" class="btn mt-1">Update Password</button>
+                    <button type="submit" class="btn mt-1">Përditëso Fjalëkalimin</button>
                 </form>
 
                 <hr style="border: none; border-top: 1px solid var(--surface-border); margin: 2rem 0 1.5rem 0;">
-                <button id="logout-btn" class="btn btn-danger" style="width: 100%;">Log Out Entirely</button>
+                <button id="logout-btn" class="btn btn-danger" style="width: 100%;">Dilni Plotësisht</button>
             </div>
             
         </main>
